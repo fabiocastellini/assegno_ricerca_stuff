@@ -11,7 +11,7 @@ This repo contains useful data/markdowns/improvized doc relative to my research 
 - Install docker: https://www.docker.com/
 - Get ROS2 foxy image: docker pull osrf/ros:foxy-desktop
 - Install Xlaunch (required for GUI): https://sourceforge.net/projects/xming/
-- Install VSCode for programming + easy docker access: https://code.visualstudio.com/
+- Install VSCode for programming + easy docker access with Docker extension: https://code.visualstudio.com/
 
 ### Run Docker container:
 ```
@@ -22,4 +22,22 @@ docker run --name r2_foxy -it osrf/ros:foxy-desktop
 - Launch Xlaunch, select "DISPLAY NUMBER" (0), next, next, finish  
 ```
 docker run --name r2_foxy -e DISPLAY=host.docker.internal:0.0 -it osrf/ros:foxy-desktop
+```
+
+### VSCode:
+- Create folder in Desktop called Docker
+- Create "Dockerfile"
+```
+FROM osrf/ros:foxy-desktop
+RUN apt-get-update
+RUN apt-get install git && apt-get install python3-pip
+RUN sudo apt-get install terminator
+RUN sudo apt install python3-colcon-common-extensions
+RUN mkdir -p ~/ros2_ws/src && cd ~/ros2_ws
+RUN echo "ALL DONE"
+```
+- Go to Desktop/Docker folder
+- Run:
+```
+ docker build -t r2_foxy_from_file .
 ```
