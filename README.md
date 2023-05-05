@@ -24,12 +24,12 @@ docker run --name r2_foxy -it osrf/ros:foxy-desktop
 docker run --name r2_foxy -e DISPLAY=host.docker.internal:0.0 -it osrf/ros:foxy-desktop
 ```
 
-### VSCode:
+### To create a new Docker image starting from another:
 - Create folder in Desktop called Docker
 - Create "Dockerfile"
 ```
 FROM osrf/ros:foxy-desktop
-RUN apt-get-update
+RUN apt-get update
 RUN apt-get install git && apt-get install python3-pip
 RUN sudo apt-get install terminator
 RUN sudo apt install python3-colcon-common-extensions
