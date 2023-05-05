@@ -18,6 +18,7 @@ This repo contains useful data/markdowns/improvized doc relative to my research 
 docker run --name r2_foxy -it osrf/ros:foxy-desktop
 ```
 
+
 ### Enable ROS2 GUI:
 - Launch Xlaunch, select "DISPLAY NUMBER" (0), next, next, finish  
 ```
@@ -41,3 +42,14 @@ RUN echo "ALL DONE"
 ```
  docker build -t r2_foxy_from_file .
 ```
+
+#### Alternative: commit a container that is running
+```
+docker commit original_name new_name:tag_name
+```
+
+### To source the colon_ws
+```
+source install/local_setup.bash
+```
+
