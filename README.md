@@ -23,6 +23,7 @@ docker run --name r2_foxy -it osrf/ros:foxy-desktop
 - Launch Xlaunch, select "DISPLAY NUMBER" (0), next, next, finish  
 ```
 docker run --name r2_foxy -e DISPLAY=host.docker.internal:0.0 -it osrf/ros:foxy-desktop
+docker run --name r2_foxy_slam -e DISPLAY=host.docker.internal:0.0 -it r2_foxy_slam:version1_05_05_23
 ```
 
 ### To create a new Docker image starting from another:
@@ -46,6 +47,9 @@ RUN echo "ALL DONE"
 #### Alternative: commit a container that is running
 ```
 docker commit original_name new_name:tag_name
+docker save -o r2_foxy_slam.tar r2_foxy_slam
+
+docker run -it 
 ```
 
 ### To source the colon_ws
