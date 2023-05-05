@@ -30,7 +30,7 @@ docker run --name r2_foxy -e DISPLAY=host.docker.internal:0.0 -it osrf/ros:foxy-
 ```
 FROM osrf/ros:foxy-desktop
 RUN apt-get update
-RUN apt-get install git && apt-get install python3-pip
+RUN sudo apt-get install git && apt-get install python3-pip
 RUN sudo apt-get install terminator
 RUN sudo apt install python3-colcon-common-extensions
 RUN mkdir -p ~/ros2_ws/src && cd ~/ros2_ws
