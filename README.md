@@ -63,3 +63,6 @@ export ROS_DOMAIN_ID=1
 ### Access docker container
 docker exec -it 5899a125a370 /bin/bash
 
+### ROBOT
+ ssh agri@10.42.0.3
+
