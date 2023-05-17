@@ -57,3 +57,6 @@ docker run -it
 source install/local_setup.bash
 ```
 
+### Access docker container
+docker exec -it 5899a125a370 /bin/bash
+
