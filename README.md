@@ -55,6 +55,9 @@ docker run -it
 ### To source the colon_ws
 ```
 source install/local_setup.bash
+source /opt/ros/foxy/setup.bash
+source root/colcon_ws/install/local_setup.bash
+export ROS_DOMAIN_ID=1
 ```
 
 ### Access docker container
