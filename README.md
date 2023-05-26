@@ -65,4 +65,25 @@ docker exec -it 5899a125a370 /bin/bash
 
 ### ROBOT
  ssh agri@10.42.0.3
+ 
+ 
+### Install ROS on EDATEC CM4 Nano
+- flash Ubuntu 20.04 64 bit on the internal memory
+- install ROS2 https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html
+- Run following commands
+ ```
+  sudo apt-get install ros-foxy-sensor-msgs-py
+sudo apt install python3-pip
+pip install opencv-python
+ sudo apt install python3-pykdl 
+pip install timm
+
+git clone https://bitbucket.org/qbrobotics/qbdevice-api-6.x.x.git
+cd qbdevice-api-6.x.x/src/ && make
+
+git clone https://github.com/creminem94/Weed-Removal-Robot.git
+#mkdir -p ~/colcon_ws/src
+
+```
+
 
