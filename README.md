@@ -84,7 +84,7 @@ cd qbdevice-api-6.x.x/src/ && make
 git clone https://github.com/creminem94/Weed-Removal-Robot.git
 #mkdir -p ~/colcon_ws/src
 
-# Rviz2:
+# Rviz2: I solved doing colcon build on ros2_foxy folder!
 cd ~/colcon_ws/src
 git clone https://github.com/ros2/rviz.git --branch foxy
 ```
