@@ -72,10 +72,10 @@ docker exec -it 5899a125a370 /bin/bash
 - install ROS2 https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html
 - Run following commands
  ```
-  sudo apt-get install ros-foxy-sensor-msgs-py
+sudo apt-get install ros-foxy-sensor-msgs-py
 sudo apt install python3-pip
 pip install opencv-python
- sudo apt install python3-pykdl 
+sudo apt install python3-pykdl 
 pip install timm
 
 git clone https://bitbucket.org/qbrobotics/qbdevice-api-6.x.x.git
@@ -84,6 +84,9 @@ cd qbdevice-api-6.x.x/src/ && make
 git clone https://github.com/creminem94/Weed-Removal-Robot.git
 #mkdir -p ~/colcon_ws/src
 
+# Rviz2:
+cd ~/colcon_ws/src
+git clone https://github.com/ros2/rviz.git --branch foxy
 ```
 
 
