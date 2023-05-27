@@ -98,6 +98,11 @@ ros2 launch realsense2_camera rs_launch.py
 source ~/ros2_ws/install/setup.bash
 source /opt/ros/foxy/setup.bash
 
+### To have multiple terminals while on SSH with CM4 Nano not working!:
+Source: https://askubuntu.com/questions/332104/open-another-terminal-window-with-the-same-ssh-session-as-original-window
+sudo apt install gnome-terminal
+
+
 
 ```
 
