@@ -89,7 +89,8 @@ cd ~/colcon_ws/src
 git clone https://github.com/ros2/rviz.git --branch foxy
 ```
 
-### Install Realsense on PC ROS2 & CM4 Nano
+### Install Realsense on PC ROS2 & CM4 Nano 
+Source: https://github.com/vanderbiltrobotics/realsense-ros
 ```
 sudo apt-get install ros-foxy-realsense2-camera
 ros2 launch realsense2_camera rs_launch.py
