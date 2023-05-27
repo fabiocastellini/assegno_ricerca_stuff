@@ -89,4 +89,14 @@ cd ~/colcon_ws/src
 git clone https://github.com/ros2/rviz.git --branch foxy
 ```
 
+### Install Realsense on PC ROS2
+```
+sudo apt-get install ros-foxy-realsense2-camera
+ros2 launch realsense2_camera rs_launch.py
+# always source envorionmnet:
+source ~/ros2_ws/install/setup.bash
+source /opt/ros/foxy/setup.bash
+
+
+```
 
