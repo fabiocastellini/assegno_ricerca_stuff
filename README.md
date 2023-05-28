@@ -102,7 +102,9 @@ source /opt/ros/foxy/setup.bash
 Source: https://askubuntu.com/questions/332104/open-another-terminal-window-with-the-same-ssh-session-as-original-window
 sudo apt install gnome-terminal
 
-
-
+### To mount a USB drive and access data on raspy/CM4 nano
+Source: https://www.youtube.com/watch?v=stqVx3uTBFA
+sudo fdisk -l
+sudo mount /dev/sda1 /media/usb
 ```
 
