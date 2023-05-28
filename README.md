@@ -81,6 +81,7 @@ pip install timm
 git clone https://bitbucket.org/qbrobotics/qbdevice-api-6.x.x.git
 cd qbdevice-api-6.x.x/src/ && make
 
+# Doens't work cause it's a private folder! Mount usb and copy file
 git clone https://github.com/creminem94/Weed-Removal-Robot.git
 #mkdir -p ~/colcon_ws/src
 
