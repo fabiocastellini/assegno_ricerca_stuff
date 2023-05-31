@@ -116,5 +116,12 @@ sudo apt-get install libc6:i386
 cd ~/Downloads & chmod +x mmwave_sdk_03_06_00_00-LTS-Linux-x86-Install.bin 
 ./mmwave_sdk_03_06_00_00-LTS-Linux-x86-Install.bin
 
+List USB ports:
+ll /dev/serial/by-id
+
+Modify serial ports in the launch file:
+gedit ~/mmwave_ti_ros/ros_driver/src/ti_mmwave_rospkg/launch/...
+
+
 
 
