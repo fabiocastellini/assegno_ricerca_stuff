@@ -109,3 +109,12 @@ sudo fdisk -l
 sudo mount /dev/sda1 /media/usb
 ```
 
+### mmWave Sensor (IWR6843LEVM Texas Instruments)
+- Install sdk from https://www.ti.com/tool/MMWAVE-SDK
+```
+sudo apt-get install libc6:i386
+cd ~/Downloads & chmod +x mmwave_sdk_03_06_00_00-LTS-Linux-x86-Install.bin 
+./mmwave_sdk_03_06_00_00-LTS-Linux-x86-Install.bin
+
+
+
