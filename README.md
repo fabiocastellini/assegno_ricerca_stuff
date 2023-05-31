@@ -110,6 +110,8 @@ sudo mount /dev/sda1 /media/usb
 ```
 
 ### mmWave Sensor (IWR6843LEVM Texas Instruments)
+Launch online demo:
+https://dev.ti.com/gallery/view/mmwave/mmWave_Demo_Visualizer/ver/3.6.0/
 
 List USB ports:
 ll /dev/serial/by-id
@@ -117,13 +119,15 @@ ll /dev/serial/by-id
 Modify serial ports in the launch file:
 gedit ~/mmwave_ti_ros/ros_driver/src/ti_mmwave_rospkg/launch/...
 
-Flash the board:
+Flash the board, follow this guide: https://www.ti.com/video/6205855073001
 https://dev.ti.com/tirex/explore/node?node=A__AB268N4OBosFpbbKHivyuw__com.ti.mmwave_industrial_toolbox__VLyFKFf__4.9.0
 - Download: https://www.ti.com/tool/UNIFLASH
 ```
 sudo ln -sf /lib/x86_64-linux-gnu/libudev.so.1 /lib/x86_64-linux-gnu/libudev.so.0
 cd ~/Downloads & chmod +x uniflash_sl.8.3.0.4307.run 
 ./uniflash_sl.8.3.0.4307.run 
+Install required library:
+sudo apt-get install libgconf-2-4
 ```
 
 Install sdk from https://www.ti.com/tool/MMWAVE-SDK 
