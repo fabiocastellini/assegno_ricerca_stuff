@@ -27,12 +27,14 @@ docker run --name r2_foxy_slam -e DISPLAY=host.docker.internal:0.0 -it r2_foxy_s
 ```
 
 
-### ROS1 Melodic with GUI:
+### ROS1 Melodic with GUI for mmWave:
 ```
 docker run --name r1_melodic -e DISPLAY=host.docker.internal:0.0 -it osrf/ros:melodic-desktop-bionic
  apt-get update && apt-get install -y --no-install-recommends \
     ros-melodic-desktop-full=1.4.1-0* \
     && rm -rf /var/lib/apt/lists/*
+Link: https://blog.csdn.net/qq_37429313/article/details/124235487
+
 ```
 
 ### To create a new Docker image starting from another:
@@ -90,7 +92,8 @@ pip install timm
 git clone https://bitbucket.org/qbrobotics/qbdevice-api-6.x.x.git
 cd qbdevice-api-6.x.x/src/ && make
 
-# Doens't work cause it's a private folder! Mount usb and copy file
+# Doens't work cause it's a private folder! Mount 
+and copy file
 git clone https://github.com/creminem94/Weed-Removal-Robot.git
 #mkdir -p ~/colcon_ws/src
 
@@ -145,7 +148,18 @@ sudo apt-get install libc6:i386
 cd ~/Downloads & chmod +x mmwave_sdk_03_06_00_00-LTS-Linux-x86-Install.bin 
 ./mmwave_sdk_03_06_00_00-LTS-Linux-x86-Install.bin
 
+Tutorial: https://dev.ti.com/tirex/explore/node?a=VLyFKFf__4.11.0&node=A__ABfVSftqTn9gPnXnrqFxdg__com.ti.mmwave_industrial_toolbox__VLyFKFf__4.11.0
+git clone https://git.ti.com/cgit/mmwave_radar/mmwave_ti_ros/
+cd mmwave_ti_ros/autonomous_robotics_ros/ && catkin_make
+source devel/setup.bash
 
 
+https://github.com/NVIDIA/nvidia-docker/issues/1238
+sudo apt-get install curl
 
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker
 
