@@ -26,6 +26,15 @@ docker run --name r2_foxy -e DISPLAY=host.docker.internal:0.0 -it osrf/ros:foxy-
 docker run --name r2_foxy_slam -e DISPLAY=host.docker.internal:0.0 -it r2_foxy_slam:version1_05_05_23
 ```
 
+
+### ROS1 Melodic with GUI:
+```
+docker run --name r1_melodic -e DISPLAY=host.docker.internal:0.0 -it osrf/ros:melodic-desktop-bionic
+ apt-get update && apt-get install -y --no-install-recommends \
+    ros-melodic-desktop-full=1.4.1-0* \
+    && rm -rf /var/lib/apt/lists/*
+```
+
 ### To create a new Docker image starting from another:
 - Create folder in Desktop called Docker
 - Create "Dockerfile"
