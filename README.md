@@ -163,3 +163,7 @@ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.li
 sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
 
+Running the Small Obstacle Detection demo:
+- https://dev.ti.com/tirex/explore/content/radar_toolbox_1_00_01_07/tools/visualizers/Industrial_Visualizer/docs/mmWave_Industrial_Visualizer_User_Guide.html
+- flashing the small_obstacle_detection_6843.bin file
+
