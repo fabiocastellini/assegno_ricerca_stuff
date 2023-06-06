@@ -167,3 +167,8 @@ Running the Small Obstacle Detection demo:
 - https://dev.ti.com/tirex/explore/content/radar_toolbox_1_00_01_07/tools/visualizers/Industrial_Visualizer/docs/mmWave_Industrial_Visualizer_User_Guide.html
 - flashing the small_obstacle_detection_6843.bin file
 
+Integrating mmWave into ROS2 starting from the GUI and having flashed the small obstacle detection demo:
+```
+ros2 pkg create --build-type ament_python ti_mmwave_ros2
+```
+
