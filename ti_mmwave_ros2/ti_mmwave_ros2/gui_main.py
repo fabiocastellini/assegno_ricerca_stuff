@@ -130,38 +130,18 @@ class MinimalPublisher(Node):
         super().__init__('minimal_publisher')
         #self.publisher_ = self.create_publisher(String, 'topic', 10)
         self.pcd_pub = self.create_publisher(PointCloud2, 'ti_mmwave/pcd', 10)
-        self.bbox_pub = self.create_publisher(MarkerArray, 'ti_mmwave/bbox', 10)
+        self.boundaryBoxes_pub = self.create_publisher(MarkerArray, 'ti_mmwave/boundaryBoxes', 10)
+        self.tracks_pub = self.create_publisher(MarkerArray, 'ti_mmwave/tracks', 10)
 
-    def run(self, data):       
-        self.width = 100
-        self.height = 100
-        self.header = Header()
-        self.header.frame_id = 'map'
-        self.counter = 0
-        dtype = PointField.FLOAT32
-     
-        self.fields = [PointField(name='x', offset=0, datatype=dtype, count=1),
-                        PointField(name='y', offset=4, datatype=dtype, count=1),
-                        PointField(name='z', offset=8, datatype=dtype, count=1),
-                        PointField(name='intensity', offset=12, datatype=dtype, count=1)]
-        
-        self.header.stamp = self.get_clock().now().to_msg()
-        x, y = np.meshgrid(np.linspace(-2, 2, self.width), np.linspace(-2, 2, self.height))
-        z = 0.5 * np.sin(2*x-self.counter/10.0) * np.sin(2*y)
-        points = np.array([x, y, z, z]).reshape(4, -1).T
-        pc2_msg = point_cloud2.create_cloud(self.header, self.fields, points)
-        self.pcd_pub.publish(pc2_msg)
 
 # Publisher object
 rclpy.init()
 minimal_publisher = MinimalPublisher()
-        
+
 class Window(QDialog):
     def __init__(self, parent=None, size=[]):
         super(Window, self).__init__(parent)
-
-        self.tracksBoxes = [] # Fabio added
-
+        
         # set window toolbar options, and title
         self.setWindowFlags(
             Qt.Window |
@@ -215,15 +195,15 @@ class Window(QDialog):
         #color gradients
         # TODO Simplify color gradients
         self.Gradients = OrderedDict([
-    ('bw', {'ticks': [(0.0, (0, 0, 0, 255)), (1, (255, 255, 255, 255))], 'mode': 'rgb'}),
-    ('hot', {'ticks': [(0.3333, (185, 0, 0, 255)), (0.6666, (255, 220, 0, 255)), (1, (255, 255, 255, 255)), (0, (0, 0, 0, 255))], 'mode': 'rgb'}),
-    ('jet', {'ticks': [(1, (166, 0, 0, 255)), (0.32247191011235954, (0, 255, 255, 255)), (0.11348314606741573, (0, 68, 255, 255)), (0.6797752808988764, (255, 255, 0, 255)), (0.902247191011236, (255, 0, 0, 255)), (0.0, (0, 0, 166, 255)), (0.5022471910112359, (0, 255, 0, 255))], 'mode': 'rgb'}),
-    ('summer', {'ticks': [(1, (255, 255, 0, 255)), (0.0, (0, 170, 127, 255))], 'mode': 'rgb'} ),
-    ('space', {'ticks': [(0.562, (75, 215, 227, 255)), (0.087, (255, 170, 0, 254)), (0.332, (0, 255, 0, 255)), (0.77, (85, 0, 255, 255)), (0.0, (255, 0, 0, 255)), (1.0, (255, 0, 127, 255))], 'mode': 'rgb'}),
-    ('winter', {'ticks': [(1, (0, 255, 127, 255)), (0.0, (0, 0, 255, 255))], 'mode': 'rgb'}),
-    ('spectrum2', {'ticks': [(1.0, (255, 0, 0, 255)), (0.0, (255, 0, 255, 255))], 'mode': 'hsv'}),
-    ('heatmap', {'ticks': [ (1, (255, 0, 0, 255)), (0, (131, 238, 255, 255))], 'mode': 'hsv'})
-])
+            ('bw', {'ticks': [(0.0, (0, 0, 0, 255)), (1, (255, 255, 255, 255))], 'mode': 'rgb'}),
+            ('hot', {'ticks': [(0.3333, (185, 0, 0, 255)), (0.6666, (255, 220, 0, 255)), (1, (255, 255, 255, 255)), (0, (0, 0, 0, 255))], 'mode': 'rgb'}),
+            ('jet', {'ticks': [(1, (166, 0, 0, 255)), (0.32247191011235954, (0, 255, 255, 255)), (0.11348314606741573, (0, 68, 255, 255)), (0.6797752808988764, (255, 255, 0, 255)), (0.902247191011236, (255, 0, 0, 255)), (0.0, (0, 0, 166, 255)), (0.5022471910112359, (0, 255, 0, 255))], 'mode': 'rgb'}),
+            ('summer', {'ticks': [(1, (255, 255, 0, 255)), (0.0, (0, 170, 127, 255))], 'mode': 'rgb'} ),
+            ('space', {'ticks': [(0.562, (75, 215, 227, 255)), (0.087, (255, 170, 0, 254)), (0.332, (0, 255, 0, 255)), (0.77, (85, 0, 255, 255)), (0.0, (255, 0, 0, 255)), (1.0, (255, 0, 127, 255))], 'mode': 'rgb'}),
+            ('winter', {'ticks': [(1, (0, 255, 127, 255)), (0.0, (0, 0, 255, 255))], 'mode': 'rgb'}),
+            ('spectrum2', {'ticks': [(1.0, (255, 0, 0, 255)), (0.0, (255, 0, 255, 255))], 'mode': 'hsv'}),
+            ('heatmap', {'ticks': [ (1, (255, 0, 0, 255)), (0, (131, 238, 255, 255))], 'mode': 'hsv'})
+        ])
         cmap = 'heatmap'
         if (cmap in self.Gradients):
             self.gradientMode = self.Gradients[cmap]
@@ -257,6 +237,7 @@ class Window(QDialog):
         self.initBoundaryBoxPane()
         self.initVitalsPlots()
 
+        
         # Set the layout
         # Create tab for different graphing options
         self.graphTabs = QTabWidget()
@@ -665,6 +646,53 @@ class Window(QDialog):
         self.boxTab = QTabWidget()
         self.addBoundBox('pointBounds')
     
+    # Should be run only on change of boundary boxes!
+    def publish_ros_boundaryBoxes(self):
+        marker_arr = MarkerArray()
+        for box_id, box in enumerate(self.boundaryBoxes):
+            # Get dimensions of box 
+            minX = float(box['boundList'][0].text())
+            maxX = float(box['boundList'][1].text())
+            minY = float(box['boundList'][2].text())
+            maxY = float(box['boundList'][3].text())
+            minZ = float(box['boundList'][4].text())
+            maxZ = float(box['boundList'][5].text())  
+
+            lines = Marker()
+            lines.header.frame_id = "map"
+            lines.header.stamp = minimal_publisher.get_clock().now().to_msg()
+            lines.type = 5  # LINE_LIST = 5
+            lines.id = box_id
+            lines.ns = "basic_shapes"
+            lines.action = 0 #add/modify marker
+            lines.scale.x, lines.scale.y = 0.01, 0.01    # Set the scale of the marker
+            
+            boxColor = pg.glColor(box['color'].itemData(box['color'].currentIndex()))
+            lines.color.r, lines.color.g, lines.color.b, lines.color.a = boxColor
+
+            pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8 = Point(),Point(),Point(),Point(),Point(),Point(),Point(),Point()
+            pt1.x, pt1.y, pt1.z = minX, minY, minZ
+            pt2.x, pt2.y, pt2.z = minX, minY, maxZ
+            pt3.x, pt3.y, pt3.z = maxX, minY, minZ
+            pt4.x, pt4.y, pt4.z = maxX, minY, maxZ
+            pt5.x, pt5.y, pt5.z = minX, maxY, minZ
+            pt6.x, pt6.y, pt6.z = minX, maxY, maxZ
+            pt7.x, pt7.y, pt7.z = maxX, maxY, minZ
+            pt8.x, pt8.y, pt8.z = maxX, maxY, maxZ
+            
+            for p in [pt1, pt2, pt1, pt3, pt3, pt4, pt2, pt4]:
+                lines.points.append(p)
+            
+            for p in [pt5, pt6, pt5, pt7, pt7, pt8, pt8, pt6]:
+                lines.points.append(p)
+
+            for p in [pt2, pt6, pt1, pt5, pt4, pt8, pt3, pt7]:
+                lines.points.append(p)           
+
+            marker_arr.markers.append(lines)   
+        # Publish bboxes
+        minimal_publisher.boundaryBoxes_pub.publish(marker_arr)
+        rclpy.spin_once(minimal_publisher, timeout_sec=0.01)
 
     # For live tuning when available
     def onChangeBoundaryBox(self):
@@ -677,7 +705,10 @@ class Window(QDialog):
                 yl = float(box['boundList'][2].text())
                 yr = float(box['boundList'][3].text())
                 zl = float(box['boundList'][4].text())
-                zr = float(box['boundList'][5].text())
+                zr = float(box['boundList'][5].text())  
+
+                # Fabio: publish just when changes
+                self.publish_ros_boundaryBoxes()
             except:
                 # You get here if you enter an invalid number
                 # When you enter a minus sign for a negative value, you will end up here before you type the full number
@@ -850,15 +881,10 @@ class Window(QDialog):
         if ('numDetectedPoints' in outputDict):
             numPoints = outputDict['numDetectedPoints']
 
-        print("numPoints:", numPoints)      
-
-
         # Tracks
         if ('trackData' in outputDict):
             tracks = outputDict['trackData']
-            
-            
-
+                        
         # Heights
         if ('heightData' in outputDict):
             heights = outputDict['heightData']
@@ -1044,6 +1070,7 @@ class Window(QDialog):
         for cstr in self.coordStr:
             cstr.setVisible(False)
 
+               
         # Visualize Target Heights  
         if (heights is not None):
             if (len(heights) != len(tracks)):
@@ -1095,9 +1122,7 @@ class Window(QDialog):
         while (len(self.previousClouds) > numPersistentFrames):
             self.previousClouds.pop(0)
 
-        #self.publish_ros_pcd(pointCloud)
-
-            
+                    
         # Since track indexes are delayed a frame, delay showing the current points by 1 frame
         if (self.frameNum > 1 and (self.configType.currentText() == DEMO_NAME_3DPC or self.configType.currentText() == DEMO_NAME_VITALS)):
             cumulativeCloud = np.concatenate(self.previousClouds[:-1])
@@ -1114,8 +1139,10 @@ class Window(QDialog):
                 self.get_thread = updateQTTargetThread3D(cumulativeCloud, tracks, self.scatter, self.pcplot, numTracks, self.ellipsoids, self.coordStr, classifierOutput, self.zRange, self.colorGradient, self.pointColorMode.currentText(), self.plotTracks.isChecked(), self.trackColorMap)
                 self.get_thread.done.connect(self.graphDone)
                 self.get_thread.start(priority=QThread.HighestPriority-1)
-                
-                #self.publish_ros_bbox()
+
+                self.publish_ros_pcd(pointCloud)
+                self.publish_tracks(tracks) # Publish ROS2 tracks' boxes
+                                
         elif (self.graphTabs.currentWidget() == self.rangePlot):
             
             # TODO add logic here to plot major or minor depending on gui monitor input
@@ -1150,23 +1177,23 @@ class Window(QDialog):
                 self.rangePlot.getPlotItem().setLabel('middle','Major & Minor Range Profile Mode Not Supported')
             else:
                 self.rangePlot.getPlotItem().setLabel('middle','INVALID gui monitor range profile input')
-            
+                       
             self.graphDone()
+            
             
 
         else: 
             print (f'Warning: Invalid Widget Selected: ${self.graphTabs.currentWidget()}')
 
-        self.publish_tracks(tracks)
+        
 
     def publish_ros_pcd(self, pcd):
-        print("pub ros pcd")     
+        print("[ROS2] Publishing pointcloud...")     
         
         # Create pointcloud2 message:        
         header = Header()
         header.frame_id = 'map'
         header.stamp = minimal_publisher.get_clock().now().to_msg()
-
         dtype = PointField.FLOAT32
 
         fields = [PointField(name='x', offset=0, datatype=dtype, count=1),
@@ -1179,81 +1206,16 @@ class Window(QDialog):
 
         # Publish pointcloud 
         minimal_publisher.pcd_pub.publish(pc2_msg)
-        rclpy.spin_once(minimal_publisher, timeout_sec=0.1)
-
-    def publish_ros_bbox(self):
-        print("publish_ros_bbox")
-
-        marker_arr = MarkerArray()
-        for box_id, box in enumerate(self.boundaryBoxes):
-            # Get dimensions of box 
-            minX = float(box['boundList'][0].text())
-            maxX = float(box['boundList'][1].text())
-            minY = float(box['boundList'][2].text())
-            maxY = float(box['boundList'][3].text())
-            minZ = float(box['boundList'][4].text())
-            maxZ = float(box['boundList'][5].text())  
-
-            lines = Marker()
-            lines.header.frame_id = "map"
-            lines.header.stamp = minimal_publisher.get_clock().now().to_msg()
-            lines.type = 5  # LINE_LIST = 5
-            lines.id = box_id
-            lines.ns = "basic_shapes"
-            lines.action = 0 #add/modify marker
-            lines.scale.x, lines.scale.y = 0.01, 0.01    # Set the scale of the marker
-            
-            boxColor = pg.glColor(box['color'].itemData(box['color'].currentIndex()))
-            lines.color.r, lines.color.g, lines.color.b, lines.color.a = boxColor
-
-            pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8 = Point(),Point(),Point(),Point(),Point(),Point(),Point(),Point()
-            pt1.x, pt1.y, pt1.z = minX, minY, minZ
-            pt2.x, pt2.y, pt2.z = minX, minY, maxZ
-            pt3.x, pt3.y, pt3.z = maxX, minY, minZ
-            pt4.x, pt4.y, pt4.z = maxX, minY, maxZ
-            pt5.x, pt5.y,  pt5.z  = minX, maxY, minZ
-            pt6.x, pt6.y, pt6.z = minX, maxY, maxZ
-            pt7.x, pt7.y, pt7.z = maxX, maxY, minZ
-            pt8.x, pt8.y, pt8.z = maxX, maxY, maxZ
-            
-            lines.points.append(pt1)
-            lines.points.append(pt2)
-            lines.points.append(pt1)
-            lines.points.append(pt3)
-            lines.points.append(pt3)
-            lines.points.append(pt4)
-            lines.points.append(pt2)
-            lines.points.append(pt4)
-
-            lines.points.append(pt5)
-            lines.points.append(pt6)
-            lines.points.append(pt5)
-            lines.points.append(pt7)
-            lines.points.append(pt7)
-            lines.points.append(pt8)
-            lines.points.append(pt8)
-            lines.points.append(pt6)
+        rclpy.spin_once(minimal_publisher, timeout_sec=0.01)
 
 
-            lines.points.append(pt2)
-            lines.points.append(pt6)
-            lines.points.append(pt1)
-            lines.points.append(pt5)
-            lines.points.append(pt4)
-            lines.points.append(pt8)
-            lines.points.append(pt3)
-            lines.points.append(pt7)
-
-            marker_arr.markers.append(lines)      
-
-        # Publish bboxes
-        minimal_publisher.bbox_pub.publish(marker_arr)
-        rclpy.spin_once(minimal_publisher, timeout_sec=0.1)
+        
 
     def publish_tracks(self, tracks):
-        print("publish_tracks")
-
         marker_arr = MarkerArray()
+        
+        print("[ROS2] Publishing tracks...")
+                    
         for track_id, track in enumerate(tracks):
             # From drawTrack:
             x = track[1]
@@ -1272,13 +1234,8 @@ class Window(QDialog):
             zr=z+zrad
 
             # Get dimensions of box 
-            minX = xl
-            maxX = xr
-            minY = yl
-            maxY = yr
-            minZ = zl
-            maxZ = zr
-
+            minX, maxX, minY, maxY, minZ, maxZ = xl, xr, yl, yr, zl, zr
+        
             lines = Marker()
             lines.header.frame_id = "map"
             lines.header.stamp = minimal_publisher.get_clock().now().to_msg()
@@ -1296,44 +1253,27 @@ class Window(QDialog):
             pt2.x, pt2.y, pt2.z = minX, minY, maxZ
             pt3.x, pt3.y, pt3.z = maxX, minY, minZ
             pt4.x, pt4.y, pt4.z = maxX, minY, maxZ
-            pt5.x, pt5.y,  pt5.z  = minX, maxY, minZ
+            pt5.x, pt5.y, pt5.z = minX, maxY, minZ
             pt6.x, pt6.y, pt6.z = minX, maxY, maxZ
             pt7.x, pt7.y, pt7.z = maxX, maxY, minZ
             pt8.x, pt8.y, pt8.z = maxX, maxY, maxZ
             
-            lines.points.append(pt1)
-            lines.points.append(pt2)
-            lines.points.append(pt1)
-            lines.points.append(pt3)
-            lines.points.append(pt3)
-            lines.points.append(pt4)
-            lines.points.append(pt2)
-            lines.points.append(pt4)
+            for p in [pt1, pt2, pt1, pt3, pt3, pt4, pt2, pt4]:
+                lines.points.append(p)
+        
+            for p in [pt5, pt6, pt5, pt7, pt7, pt8, pt8, pt6]:
+                lines.points.append(p)
 
-            lines.points.append(pt5)
-            lines.points.append(pt6)
-            lines.points.append(pt5)
-            lines.points.append(pt7)
-            lines.points.append(pt7)
-            lines.points.append(pt8)
-            lines.points.append(pt8)
-            lines.points.append(pt6)
-
-
-            lines.points.append(pt2)
-            lines.points.append(pt6)
-            lines.points.append(pt1)
-            lines.points.append(pt5)
-            lines.points.append(pt4)
-            lines.points.append(pt8)
-            lines.points.append(pt3)
-            lines.points.append(pt7)
+            for p in [pt2, pt6, pt1, pt5, pt4, pt8, pt3, pt7]:
+                lines.points.append(p)     
 
             marker_arr.markers.append(lines)      
 
-        # Publish bboxes
-        minimal_publisher.bbox_pub.publish(marker_arr)
-        rclpy.spin_once(minimal_publisher, timeout_sec=0.1)
+        # Publish fixed bboxes 
+        minimal_publisher.tracks_pub.publish(marker_arr)
+        rclpy.spin_once(minimal_publisher, timeout_sec=0.01)
+
+    
 
     def graphDone(self):
         plotend = int(round(time.time()*1000))
