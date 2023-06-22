@@ -179,3 +179,6 @@ Integrating mmWave into ROS2 starting from the GUI and having flashed the small 
 ros2 pkg create --build-type ament_python ti_mmwave_ros2
 ```
 
+# To play ROS2 bags:
+sudo apt-get install ros-foxy-rosbag2-storage-default-plugins ros-foxy-ros2bag
+
