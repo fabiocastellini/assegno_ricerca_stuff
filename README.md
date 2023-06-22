@@ -12,6 +12,13 @@ This repo contains useful data/markdowns/improvized doc relative to my research 
 - Get ROS2 foxy image: docker pull osrf/ros:foxy-desktop
 - Install Xlaunch (required for GUI): https://sourceforge.net/projects/xming/
 - Install VSCode for programming + easy docker access with Docker extension: https://code.visualstudio.com/
+- To reinstall RVIZ2 in case of "abort error":
+```
+cd ~/rviz2_ws/src
+git clone -b foxy https://github.com/ros2/rviz.git
+cd ../
+colcon build --merge-install
+```
 
 ### Run Docker container:
 ```
