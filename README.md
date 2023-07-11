@@ -182,3 +182,6 @@ ros2 pkg create --build-type ament_python ti_mmwave_ros2
 # To play ROS2 bags:
 sudo apt-get install ros-foxy-rosbag2-storage-default-plugins ros-foxy-ros2bag
 
+### Install CUDA (gpu)
+- Install conda: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
+- Install Cuda drivers (https://pytorch.org/get-started/locally/): conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
