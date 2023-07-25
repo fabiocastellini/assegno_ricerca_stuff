@@ -206,6 +206,9 @@ rosdep install --ignore-src --from-paths src -y -r
 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 source install/setup.bash
 
+# Trying out docker:
+https://moveit.picknik.ai/main/doc/how_to_guides/how_to_setup_docker_containers_in_ubuntu.html
+
 
 # ROS2 ISSUES:
 - SetuptoolsDeprecationWarning
