@@ -185,3 +185,30 @@ sudo apt-get install ros-foxy-rosbag2-storage-default-plugins ros-foxy-ros2bag
 ### Install CUDA (gpu)
 - Install conda: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 - Install Cuda drivers (https://pytorch.org/get-started/locally/): conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+
+# MoveIt2 and UR5 installation on ROS2 Foxy
+- Source https://moveit.ros.org/install-moveit2/source/
+cd ros2_ws/src
+git clone https://github.com/ros-planning/moveit2.git -b $ROS_DISTRO
+for repo in moveit2/moveit2.repos $(f="moveit2/moveit2_$ROS_DISTRO.repos"; test -r $f && echo $f); do vcs import < "$repo"; done
+rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
+
+sudo apt install ros-$ROS_DISTRO-rmw-cyclonedds-cpp
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+
+
+
+
+cd ros2_ws
+git clone -b foxy https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git src/Universal_Robots_ROS2_Driver
+rosdep install --ignore-src --from-paths src -y -r
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+source install/setup.bash
+
+
+# ROS2 ISSUES:
+- SetuptoolsDeprecationWarning
+pip install setuptools==58.2.0
+- Remove "-" from setup.cfg and insert "_"
+
