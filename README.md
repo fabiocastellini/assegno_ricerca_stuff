@@ -186,6 +186,10 @@ sudo apt-get install ros-foxy-rosbag2-storage-default-plugins ros-foxy-ros2bag
 - Install conda: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 - Install Cuda drivers (https://pytorch.org/get-started/locally/): conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
 
+#### To clear GPU memory:
+nvidia-smi
+sudo kill -9 4376 4528 (numbers under PID column) 
+
 # MoveIt2 and UR5 installation on ROS2 Foxy
 - Source https://moveit.ros.org/install-moveit2/source/
 cd ros2_ws/src
